@@ -10,11 +10,12 @@ class edgeList{
     set<string> vertices;
 
     public:
-        void insertEdge(string from, string to, double weight); //might change weights to double instead of int
+        void insertEdge(string from, string to, double weight);
         bool isEdge(string from, string to);
-        vector<double> getWeight(string from, string to); //maybe convert to vector<double> if multiple edges can exist between same airports
+        vector<double> getWeight(string from, string to);
         vector<string> getAdjacent(string vertex);
         void printGraph(); //maybe change this to vector<string> so it returns all the vertices
+        void readFile(); //inserts edges here
 };
 
 void edgeList::insertEdge(string from, string to, double weight){
@@ -81,5 +82,37 @@ vector<string> edgeList::getAdjacent(string vertex){
 void edgeList::printGraph(){ 
     for(auto it = vertices.begin(); it != vertices.end(); ++it){
         cout << *it << endl;
+    }
+}
+
+void edgeList::readFile(){
+    ifstream file("Airports2.csv");
+    string line = ""; 
+    int i = 0;
+
+    string from = "";
+    string to = "";
+    string passengers = "";
+    string seats = "";
+    string boof = "";
+    double weight = 0;
+    
+    getline(file, line); //get first line of headings
+    while(getline(file, line) && i < 100000){
+        istringstream ss(line);
+        getline(ss, from, ',');
+        getline(ss, to, ',');
+        from = from.substr(1, 3); //cut off the quotes
+        to = to.substr(1, 3);
+
+        for(int j = 0; j < 4; j++) //get all the unneeded stuff out of the way
+            getline(ss, boof, ',');
+        
+        getline(ss, passengers, ',');
+        getline(ss, seats, ',');
+        weight = ((double)stoi(passengers))/((double)stoi(seats)); //convert both seats and passengers to int and then into double
+    
+        insertEdge(from, to, weight);
+        i++;
     }
 }
