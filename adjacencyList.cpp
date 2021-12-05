@@ -22,6 +22,7 @@ public:
     vector<string> getAdjacent(string vertex);
     void printGraph();
     void readFile();
+    double getLowestWeight(string from, string to);
 };
 
 void Graph::insertEdge(string from, string to, double weight)
@@ -63,6 +64,21 @@ vector<string> Graph::getAdjacent(string vertex)
     sort(neighbors.begin(), neighbors.end());
 
     return neighbors;
+}
+
+double Graph::getLowestWeight(string from, string to){
+    for(auto it = graph[from].begin(); it != graph[from].end(); it++){
+        if(it->first == to) {
+            weights.push_back(it->second);
+        }
+    }
+    double min = 1.0;
+    for(int i = 0; i < weights.size(); i++){
+        if(weights.at(i) < min)
+            min = weights.at(i);
+    }
+    return min;
+
 }
 
 void Graph::printGraph(){
@@ -117,4 +133,5 @@ void Graph::readFile(){
 
 
 };
+
 
