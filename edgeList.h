@@ -13,6 +13,7 @@ class edgeList{
         void insertEdge(string from, string to, double weight);
         bool isEdge(string from, string to);
         vector<double> getWeight(string from, string to);
+        double getLowestWeight(string from, string to);
         vector<string> getAdjacent(string vertex);
         void printGraph(); //maybe change this to vector<string> so it returns all the vertices
         void readFile(); //inserts edges here
@@ -44,7 +45,7 @@ bool edgeList::isEdge(string from, string to){
     return false;
 }
 
-vector<double> edgeList::getWeight(string from, string to){ //returns a vector with only -1 if the edge doesn't exist
+vector<double> edgeList::getWeight(string from, string to){ //returns a vector with only -1 if the edge doesn't exist, helper function for getLowestWeight
     vector<double> weight = {-1};
     int count = 0;
 
@@ -61,6 +62,18 @@ vector<double> edgeList::getWeight(string from, string to){ //returns a vector w
     }
 
     return weight;
+}
+
+double edgeList::getLowestWeight(string from, string to){ //returns -1 if edge doesn't exist
+    vector<double> weights = getWeight(from, to);
+    double minWeight = 1;
+
+    for(int i = 0; i < weights.size(); i++){
+        if(weights[i] < minWeight)
+            minWeight = weights[i];
+    }
+
+    return minWeight;
 }
 
 vector<string> edgeList::getAdjacent(string vertex){
