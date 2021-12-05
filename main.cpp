@@ -4,11 +4,6 @@
 #include<vector>
 using namespace std;
 int main() {
-
-
-
-
-
 	cout << "Hello! welcome to Fast Flying Faries, we are a service to help you find the fastest destination to where ever you want to go!" << endl;
 	bool x = true;
 	int choice;
