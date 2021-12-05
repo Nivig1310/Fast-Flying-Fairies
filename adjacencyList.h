@@ -1,12 +1,12 @@
 #pragma once
-#include<iostream>
-#include<string>
-#include<sstream>
-#include<vector>
-#include<iterator>
-#include<algorithm>
-#include<map>
-#include<fstream>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+#include <map>
+#include <fstream>
 #include <set>
 using namespace std;
 
@@ -44,11 +44,16 @@ bool Graph::isEdge(string from, string to)
     return false;
 }
 
-vector<double> Graph::getWeight(string from, string to)
+vector<double> Graph::getWeight(string from, string to) //return -1 if no edge exists between from and to
 {
-    vector<double> weights;
+    vector<double> weights = {-1};
+    int count = 0;
     for(auto it = graph[from].begin(); it != graph[from].end(); it++){
         if(it->first == to) {
+            if(count == 0){ //first weight
+                    count++;
+                    weights[0];
+                }
             weights.push_back(it->second);
         }
     }
@@ -67,11 +72,7 @@ vector<string> Graph::getAdjacent(string vertex)
 }
 
 double Graph::getLowestWeight(string from, string to){
-    for(auto it = graph[from].begin(); it != graph[from].end(); it++){
-        if(it->first == to) {
-            weights.push_back(it->second);
-        }
-    }
+    vector<double> weights = getWeight(from, to);
     double min = 1.0;
     for(int i = 0; i < weights.size(); i++){
         if(weights.at(i) < min)
@@ -133,5 +134,4 @@ void Graph::readFile(){
 
 
 };
-
 
