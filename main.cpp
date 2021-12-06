@@ -44,6 +44,7 @@ int main() {
 			cin >> origin;
 			cout << "Now enter your destination" << endl;
 			cin >> destination;
+			cout << "Processing..." << endl;
 
             start = system_clock::now();
             eList.edgeListDijkstras(eList,origin, destination);
@@ -58,6 +59,7 @@ int main() {
 			cin >> origin;
 			cout << "Now enter your destination" << endl;
 			cin >> destination;
+			cout << "Processing..." << endl;
 			
             start = system_clock::now();
             adjList.adjListDijkstras(adjList, origin, destination);
