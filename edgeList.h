@@ -164,9 +164,10 @@ void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //ret
     parent[src] = "";
 
     visted.insert(src);
-    needToProcess.erase(src); 
+    needToProcess.erase(src);
 
-    for (auto it = graph.getAdjacent(src).begin(); it != graph.getAdjacent(src).end(); it++) { //gets adjacent vertexes of the src sring
+    vector<string> neighbors = graph.getAdjacent(src);
+    for (auto it = neighbors.begin(); it != neighbors.end(); it++) { //gets adjacent vertexes of the src sring
         density[*it] = graph.getLowestWeight(src, *it);
         parent[*it] = src;
 
@@ -178,7 +179,9 @@ void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //ret
         if (current == "") {
             break;
         }
-        for (auto it = graph.getAdjacent(current).begin(); it != graph.getAdjacent(current).end(); it++) {
+
+        vector<string> x = graph.getAdjacent(current);
+        for (auto it = x.begin(); it != x.end(); it++) {
             if ((density[current] + graph.getLowestWeight(current, *it)) < density[*it]) {
                 density[*it] = density[current] + graph.getLowestWeight(current, *it);
                 parent[*it] = current;
