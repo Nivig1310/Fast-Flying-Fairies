@@ -1,13 +1,18 @@
 #pragma once
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <list>
 #include <vector>
 #include <set>
+#include <unordered_map>
 using namespace std;
 
 class edgeList{
     list<pair<pair<string, string>, double>> edges;
     set<string> vertices;
+    string helperLowest(edgeList& graph, set<string>& visted, unordered_map<string, double>& density);
+    unordered_map<string, string> edgeListDijkstras(edgeList& graph, string src);
 
     public:
         void insertEdge(string from, string to, double weight);
@@ -15,8 +20,9 @@ class edgeList{
         vector<double> getWeight(string from, string to);
         double getLowestWeight(string from, string to);
         vector<string> getAdjacent(string vertex);
-        void printGraph(); //maybe change this to vector<string> so it returns all the vertices
+        void printGraph();
         void readFile(); //inserts edges here
+        void printRoute(string from, string to);
 };
 
 void edgeList::insertEdge(string from, string to, double weight){
@@ -94,7 +100,7 @@ vector<string> edgeList::getAdjacent(string vertex){
 
 void edgeList::printGraph(){ 
     for(auto it = vertices.begin(); it != vertices.end(); ++it){
-        cout << *it << endl;
+        cout << *it << " ";
     }
 }
 
@@ -128,4 +134,64 @@ void edgeList::readFile(){
         insertEdge(from, to, weight);
         i++;
     }
+}
+
+string edgeList::helperLowest(edgeList& graph, set<string>& visted, unordered_map<string, double>& density) {
+    int min = INT_MAX;
+    string index = "";
+    for (auto it = density.begin(); it != density.end(); it++) {
+        if (min < density[it->first] && visted.find(it->first) == visted.end()) {
+            index = it->first;
+        }
+    }
+    return index;
+}
+
+unordered_map<string, string> edgeList::edgeListDijkstras(edgeList& graph, string src) { //returns parent map
+    set<string> visted;
+    set<string> needToProcess;
+    unordered_map<string, double> density; //replaced d, previously vector<int> d
+    unordered_map<string, string> parent;
+    for (auto it = graph.vertices.begin(); it != graph.vertices.end(); it++) {
+        needToProcess.insert(*it); //inserts string verticies 
+        density[*it] = INT_MAX;
+        parent[*it] = "";
+    }
+   
+    density[src] = 0;
+    parent[src] = "";
+
+    visted.insert(src);
+    needToProcess.erase(src); 
+
+    for (auto it = graph.getAdjacent(src).begin(); it != graph.getAdjacent(src).end(); it++) { //gets adjacent vertexes of the src sring
+        density[*it] = graph.getLowestWeight(src, *it);
+        parent[*it] = src;
+
+    }
+
+    string current = src;
+
+    while (needToProcess.empty() == false) {
+        if (current == "") {
+            break;
+        }
+        for (auto it = graph.getAdjacent(current).begin(); it != graph.getAdjacent(current).end(); it++) {
+            if ((density[current] + graph.getLowestWeight(current, *it)) < density[*it]) {
+                density[*it] = density[current] + graph.getLowestWeight(current, *it);
+                parent[*it] = current;
+            }
+        }
+        needToProcess.erase(current);
+        visted.insert(current);
+        current = helperLowest(graph, visted, density);
+
+    }
+    return parent; 
+}
+
+void edgeList::printRoute(string from, string to){
+    unordered_map<string, string> parents = edgeListDijkstras(*this, from);
+    
+
 }
