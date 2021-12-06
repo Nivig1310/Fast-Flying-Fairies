@@ -6,13 +6,14 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <stack>
 using namespace std;
 
 class edgeList{
     list<pair<pair<string, string>, double>> edges;
     set<string> vertices;
     string helperLowest(edgeList& graph, set<string>& visted, unordered_map<string, double>& density);
-    unordered_map<string, string> edgeListDijkstras(edgeList& graph, string src);
+    void printRoute(unordered_map<string, string> parents, double avgDensity, string to);
 
     public:
         void insertEdge(string from, string to, double weight);
@@ -22,7 +23,7 @@ class edgeList{
         vector<string> getAdjacent(string vertex);
         void printGraph();
         void readFile(); //inserts edges here
-        void printRoute(string from, string to);
+        void edgeListDijkstras(edgeList& graph, string src, string to);
 };
 
 void edgeList::insertEdge(string from, string to, double weight){
@@ -140,14 +141,15 @@ string edgeList::helperLowest(edgeList& graph, set<string>& visted, unordered_ma
     int min = INT_MAX;
     string index = "";
     for (auto it = density.begin(); it != density.end(); it++) {
-        if (min < density[it->first] && visted.find(it->first) == visted.end()) {
+        if (min > density[it->first] && visted.find(it->first) == visted.end()) {
             index = it->first;
+            min = density[it->first];
         }
     }
     return index;
 }
 
-unordered_map<string, string> edgeList::edgeListDijkstras(edgeList& graph, string src) { //returns parent map
+void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //returns parent map
     set<string> visted;
     set<string> needToProcess;
     unordered_map<string, double> density; //replaced d, previously vector<int> d
@@ -187,11 +189,38 @@ unordered_map<string, string> edgeList::edgeListDijkstras(edgeList& graph, strin
         current = helperLowest(graph, visted, density);
 
     }
-    return parent; 
+
+    printRoute(parent, density[to], to);
 }
 
-void edgeList::printRoute(string from, string to){
-    unordered_map<string, string> parents = edgeListDijkstras(*this, from);
+void edgeList::printRoute(unordered_map<string, string> parent, double avgDensity, string to){
+    if(parent[to] == "") //if no connection exists between origin and destination
+        cout << "No connection from the origin airport to the desired destination airport" << endl;
     
+    else{ //if the connection exiss
+        stack<string> airports; //take in the parents starting from the destination all the way to the source
+        airports.push(to); //start from the destination
+        string cur = to;
 
+        while(cur != ""){ //cur is only "" if the source has been added into the stack already
+            if(parent[cur] != "")
+                airports.push(parent[cur]);
+            
+            cur = parent[cur];
+        }
+
+        avgDensity = avgDensity / airports.size(); //set the average density to the correct value
+        
+        cout << "Your route is: ";
+        while(airports.size() > 0){
+            if(airports.size() == 1) //if it's going to print out the destination airport
+                cout << airports.top() << endl;
+            else
+                cout << airports.top() << "-->";
+            
+            airports.pop();
+        }
+
+        cout << "The average density (passenger to available seats ratio) of this route is: " << avgDensity << endl;
+    }
 }
