@@ -52,19 +52,13 @@ bool edgeList::isEdge(string from, string to){
     return false;
 }
 
-vector<double> edgeList::getWeight(string from, string to){ //returns a vector with only -1 if the edge doesn't exist, helper function for getLowestWeight
-    vector<double> weight = {-1};
-    int count = 0;
+vector<double> edgeList::getWeight(string from, string to){ //returns an empty vector if edge doesn't exist, helper function for getLowestWeight
+    vector<double> weight;
 
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(it->first.first == from){ //access the origin
-            if(it->first.second == to){ //access the destination
-                if(count == 0){ //first weight
-                    count++;
-                    weight[0];
-                }
+            if(it->first.second == to) //access the destination
                 weight.push_back(it->second);
-            }
         }
     }
 
@@ -214,7 +208,7 @@ void edgeList::printRoute(unordered_map<string, string> parent, double avgDensit
             cur = parent[cur];
         }
 
-        avgDensity = avgDensity / airports.size(); //set the average density to the correct value
+        avgDensity = avgDensity / (airports.size() - 1); //set the average density to the correct value
         
         cout << "Your route is: ";
         while(airports.size() > 0){
