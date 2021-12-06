@@ -103,6 +103,8 @@ void edgeList::printGraph(){
     for(auto it = vertices.begin(); it != vertices.end(); ++it){
         cout << *it << " ";
     }
+    
+    cout << endl << endl;
 }
 
 void edgeList::readFile(){
@@ -200,7 +202,7 @@ void edgeList::printRoute(unordered_map<string, string> parent, double avgDensit
     if(parent[to] == "") //if no connection exists between origin and destination
         cout << "No connection from the origin airport to the desired destination airport" << endl;
     
-    else{ //if the connection exiss
+    else{ //if the connection exists
         stack<string> airports; //take in the parents starting from the destination all the way to the source
         airports.push(to); //start from the destination
         string cur = to;
