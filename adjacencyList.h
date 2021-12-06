@@ -222,7 +222,7 @@ void Graph::printRoute(unordered_map<string, string> parent, double avgDensity, 
             cur = parent[cur];
         }
 
-        avgDensity = avgDensity / airports.size(); //set the average density to the correct value
+        avgDensity = avgDensity / (airports.size() - 1); //set the average density to the correct value
 
         cout << "Your route is: ";
         while(airports.size() > 0){
