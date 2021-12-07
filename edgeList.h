@@ -194,7 +194,7 @@ void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //ret
 
 void edgeList::printRoute(unordered_map<string, string>& parent, double& avgDensity, string& to){
     if(parent[to] == "") //if no connection exists between origin and destination
-        cout << "No connection from the origin airport to the desired destination airport" << endl;
+        cout << "No connection from the origin airport to the desired destination airport in our database" << endl;
     
     else{ //if the connection exists
         stack<string> airports; //take in the parents starting from the destination all the way to the source
