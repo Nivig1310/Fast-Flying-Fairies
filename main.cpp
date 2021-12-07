@@ -51,7 +51,6 @@ int main() {
             end = system_clock::now();
             elapsed_seconds = end-start;
             cout << "Route to destination took " << elapsed_seconds.count() << " seconds using an edge list" << endl << endl;
-			//complete the graph algorithm to find the shortest route to destination
 		}
 
         else if (choice == 3) { //return the route & passenger to seat ratio with each edge, adjacency list
@@ -66,7 +65,6 @@ int main() {
             end = system_clock::now();
             elapsed_seconds = end-start;
             cout << "Route to destination took " << elapsed_seconds.count() << " seconds using an adjacency list" << endl << endl;
-			//complete the graph algorithm to find the shortest route to destination
 		}
 
 		else if (choice == 4) {
