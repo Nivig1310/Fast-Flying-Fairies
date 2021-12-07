@@ -25,7 +25,7 @@ public:
     double getLowestWeight(string from, string to);
     void adjListDijkstras(Graph& Graph, string src, string to);
     string helperLowest(Graph& Graph, set<string>& visted, unordered_map<string, double>& density);
-    void printRoute(unordered_map<string, string> parent, double avgDensity, string to);
+    void printRoute(unordered_map<string, string>& parent, double& avgDensity, string& to);
 
 
 
@@ -73,8 +73,9 @@ vector<string> Graph::getAdjacent(string vertex)
 {
     vector<string> neighbors;
     int x = graph[vertex].size();
-    for (int i = 0; i < graph[vertex].size(); i++) {
-        neighbors.push_back(graph[vertex].at(i).first);
+    for (int i = 0; i < graph[vertex].size(); i++){ //m where m is the number of adjacents
+        if(graph[vertex].at(i).first != vertex)
+            neighbors.push_back(graph[vertex].at(i).first);
     }
     sort(neighbors.begin(), neighbors.end());
 
@@ -165,7 +166,7 @@ string Graph::helperLowest(Graph& Graph, set<string>& visted, unordered_map<stri
     unordered_map<string, double> density; //replaced d, previously vector<int> d
     unordered_map<string, string> parent;
     //puts all vertices in need to process
-    for (auto it = Graph.graph.begin(); it != Graph.graph.end(); it++) {
+    for (auto it = Graph.graph.begin(); it != Graph.graph.end(); it++) { //O(v) where v is the number of vertices
         needToProcess.insert(it->first);
         density[it->first] = INT_MAX;
         parent[it->first] = "";
@@ -175,12 +176,12 @@ string Graph::helperLowest(Graph& Graph, set<string>& visted, unordered_map<stri
     parent[src] = "";
 
     visited.insert(src);
-    needToProcess.erase(src);
-    vector<string> neighbors = Graph.getAdjacent(src);
+    needToProcess.erase(src); //O(1)
+    vector<string> neighbors = Graph.getAdjacent(src); //O(m)
 
     //loop through neighbors of src and set their lowest weights as their distances. Set parent
-    for (auto it = neighbors.begin(); it != neighbors.end(); ++it) {
-        density[*it] = Graph.getLowestWeight(src, *it);
+    for (auto it = neighbors.begin(); it != neighbors.end(); ++it) { //O(m)
+        density[*it] = Graph.getLowestWeight(src, *it); //O(e)
         parent[*it] = src;
     }
 
@@ -188,25 +189,27 @@ string Graph::helperLowest(Graph& Graph, set<string>& visted, unordered_map<stri
 
 
 
-    while (needToProcess.empty() == false) { //while needtoprocess isnt empty
+    while (needToProcess.empty() == false){ //while needtoprocess isnt empty //O(v)
         if (current == "") {
             break;
         }
-        vector<string> x =  Graph.getAdjacent(current);
-        for (auto it = x.begin(); it != x.end(); it++) {
+        vector<string> x =  Graph.getAdjacent(current); //O(m)
+        for (auto it = x.begin(); it != x.end(); it++) { //O(m)
             if ((density[current] + Graph.getLowestWeight(current, *it)) < density[*it]) { //relaxation
-                density[*it] = density[current] + Graph.getLowestWeight(current, *it);
+                density[*it] = density[current] + Graph.getLowestWeight(current, *it); //O(e)
                 parent[*it] = current;
             }
         }
         needToProcess.erase(current);
         visited.insert(current);
-        current = Graph.helperLowest(Graph, visited, density);
+        current = Graph.helperLowest(Graph, visited, density); //O(v)
     }
      printRoute(parent, density[to], to);
 }
 
-void Graph::printRoute(unordered_map<string, string> parent, double avgDensity, string to){
+
+
+void Graph::printRoute(unordered_map<string, string>& parent, double& avgDensity, string& to){
     if(parent[to] == "") //if no connection exists between origin and destination
         cout << "No connection from the origin airport to the desired destination airport" << endl;
 
@@ -222,7 +225,7 @@ void Graph::printRoute(unordered_map<string, string> parent, double avgDensity, 
             cur = parent[cur];
         }
 
-        avgDensity = avgDensity / (airports.size() - 1); //set the average density to the correct value
+        avgDensity = avgDensity / (airports.size()-1); //set the average density to the correct value
 
         cout << "Your route is: ";
         while(airports.size() > 0){
@@ -237,5 +240,4 @@ void Graph::printRoute(unordered_map<string, string> parent, double avgDensity, 
         cout << "The average density (passenger to available seats ratio) of this route is: " << avgDensity << endl;
     }
 }
-
 
