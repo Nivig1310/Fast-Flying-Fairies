@@ -77,7 +77,6 @@ vector<string> Graph::getAdjacent(string vertex)
         if(graph[vertex].at(i).first != vertex)
             neighbors.push_back(graph[vertex].at(i).first);
     }
-    sort(neighbors.begin(), neighbors.end());
 
     return neighbors;
 }
@@ -90,7 +89,6 @@ double Graph::getLowestWeight(string from, string to) {
             min = weights.at(i);
     }
     return min;
-
 }
 
 void Graph::printGraph() {
@@ -187,8 +185,6 @@ string Graph::helperLowest(Graph& Graph, set<string>& visted, unordered_map<stri
 
     string current = src;
 
-
-
     while (needToProcess.empty() == false){ //while needtoprocess isnt empty //O(v)
         if (current == "") {
             break;
@@ -240,4 +236,3 @@ void Graph::printRoute(unordered_map<string, string>& parent, double& avgDensity
         cout << "The average density (passenger to available seats ratio) of this route is: " << avgDensity << endl;
     }
 }
-
