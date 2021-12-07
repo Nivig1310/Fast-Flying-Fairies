@@ -26,12 +26,6 @@ public:
     void adjListDijkstras(Graph& Graph, string src, string to);
     string helperLowest(Graph& Graph, set<string>& visted, unordered_map<string, double>& density);
     void printRoute(unordered_map<string, string>& parent, double& avgDensity, string& to);
-
-
-
-
-
-
 };
 
 void Graph::insertEdge(string from, string to, double weight)
