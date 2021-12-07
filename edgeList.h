@@ -13,7 +13,7 @@ class edgeList{
     list<pair<pair<string, string>, double>> edges;
     set<string> vertices;
     string helperLowest(edgeList& graph, set<string>& visted, unordered_map<string, double>& density);
-    void printRoute(unordered_map<string, string> parents, double avgDensity, string to);
+    void printRoute(unordered_map<string, string>& parents, double& avgDensity, string& to);
 
     public:
         void insertEdge(string from, string to, double weight);
@@ -80,6 +80,7 @@ double edgeList::getLowestWeight(string from, string to){ //returns -1 if edge d
 vector<string> edgeList::getAdjacent(string vertex){
     vector<string> adjVertices;
     set<string> in; //to avoid repeats
+    in.insert(vertex);
     
     for(auto it = edges.begin(); it != edges.end(); ++it){
         if(it->first.first == vertex){
@@ -166,7 +167,6 @@ void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //ret
     for (auto it = neighbors.begin(); it != neighbors.end(); it++) { //gets adjacent vertexes of the src sring
         density[*it] = graph.getLowestWeight(src, *it);
         parent[*it] = src;
-
     }
 
     string current = src;
@@ -192,7 +192,7 @@ void edgeList::edgeListDijkstras(edgeList& graph, string src, string to) { //ret
     printRoute(parent, density[to], to);
 }
 
-void edgeList::printRoute(unordered_map<string, string> parent, double avgDensity, string to){
+void edgeList::printRoute(unordered_map<string, string>& parent, double& avgDensity, string& to){
     if(parent[to] == "") //if no connection exists between origin and destination
         cout << "No connection from the origin airport to the desired destination airport" << endl;
     
