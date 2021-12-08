@@ -15,7 +15,7 @@ using namespace std::chrono;
 int main() {
 	cout << "Hello! Welcome to Fast Flying Fairies, a COVID-19 conscious service to help you find the least crowded flight(s) to certain destinations in the U.S!" << endl;
 	bool x = true;
-	int choice;
+	string choice;
 	string origin;
 	string destination;
 
@@ -35,11 +35,11 @@ int main() {
 		cout << "4. End the program" << endl;
 		cin >> choice;
         
-		if (choice == 1) { //prints out all the airports
+		if (choice == "1") { //prints out all the airports
 			eList.printGraph(); 
 		}
 
-		else if (choice == 2) { //return the route & passenger to seat ratio with each edge, edge list
+		else if (choice == "2") { //return the route & passenger to seat ratio with each edge, edge list
 			cout << "Nice! Enter your origin location" << endl;
 			cin >> origin;
 			cout << "Now enter your destination" << endl;
@@ -51,9 +51,10 @@ int main() {
             end = system_clock::now();
             elapsed_seconds = end-start;
             cout << "Route to destination took " << elapsed_seconds.count() << " seconds using an edge list" << endl << endl;
+			//complete the graph algorithm to find the shortest route to destination
 		}
 
-        else if (choice == 3) { //return the route & passenger to seat ratio with each edge, adjacency list
+        else if (choice == "3") { //return the route & passenger to seat ratio with each edge, adjacency list
 			cout << "Nice! enter your origin location" << endl;
 			cin >> origin;
 			cout << "Now enter your destination" << endl;
@@ -65,15 +66,16 @@ int main() {
             end = system_clock::now();
             elapsed_seconds = end-start;
             cout << "Route to destination took " << elapsed_seconds.count() << " seconds using an adjacency list" << endl << endl;
+			//complete the graph algorithm to find the shortest route to destination
 		}
 
-		else if (choice == 4) {
+		else if (choice == "4") {
 			cout << "Thanks for using us!" << endl;
 			x = false;
 		}
 
 		else {
-			cout << "Sorry! Not a choice, please try again";
+			cout << "Sorry! Not a choice, please try again"<< endl;
 		}
 		
 	}
